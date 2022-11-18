@@ -1,42 +1,95 @@
 import 'package:flutter/material.dart';
+
+import 'package:flutter_application_1/model/todo.dart';
 import 'package:flutter_application_1/constants/colors.dart';
+import 'package:flutter_application_1/widgets/todo_item.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  Home({Key? key}) : super(key: key);
+
+  final todosList = ToDo.todoList();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: tdBGColor,
-      appBar: _buildAppBar(),
-      body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
+        backgroundColor: tdBGColor,
+        appBar: _buildAppBar(),
+        body: Stack(children: [
+          Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              child: Column(
+                children: [
+                  searchBox(),
+                  Expanded(
+                      child: ListView(
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(top: 20, bottom: 10),
+                          child: Text(
+                            'All ToDos',
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.w500),
+                          )),
+                      for (ToDo todoo in todosList)
+                        ToDoItem(
+                          todo: todoo,
+                        ),
+                    ],
+                  )),
+                ],
+              )),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(children: [
+              Expanded(
+                  child: Container(
+                margin: EdgeInsets.only(
+                  bottom: 20,
+                  right: 20,
+                  left: 20,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-                child: TextField(
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(0),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: tdblack,
-                      size: 20,
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0.0, 0.0),
+                      blurRadius: 10.0,
+                      spreadRadius: 0.0,
                     ),
-                    prefixIconConstraints:
-                        BoxConstraints(maxHeight: 28, minWidth: 25),
-                    border: InputBorder.none,
-                    hintText: 'Search',
-                    hintStyle: TextStyle(color: tdgray),
+                  ],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                // ignore: prefer_const_constructors
+                child: TextField(
+                    decoration: InputDecoration(
+                        hintText: 'Add a new todo item',
+                        border: InputBorder.none)),
+              )),
+              Container(
+                margin: EdgeInsets.only(
+                  bottom: 20,
+                  right: 20,
+                ),
+                child: ElevatedButton(
+                  child: Text(
+                    '+',
+                    style: TextStyle(
+                      fontSize: 40,
+                    ),
+                  ),
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    primary: tdBlue,
+                    minimumSize: Size(60, 60),
+                    elevation: 10,
                   ),
                 ),
               ),
-            ],
-          )),
-    );
+            ]),
+          )
+        ]));
   }
 
   AppBar _buildAppBar() {
@@ -59,4 +112,26 @@ class Home extends StatelessWidget {
               ))
         ]));
   }
+}
+
+Widget searchBox() {
+  return Container(
+    padding: EdgeInsets.symmetric(horizontal: 15),
+    decoration: BoxDecoration(
+        color: Colors.white, borderRadius: BorderRadius.circular(20)),
+    child: TextField(
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(0),
+        prefixIcon: Icon(
+          Icons.search,
+          color: tdblack,
+          size: 20,
+        ),
+        prefixIconConstraints: BoxConstraints(maxHeight: 28, minWidth: 25),
+        border: InputBorder.none,
+        hintText: 'Search',
+        hintStyle: TextStyle(color: tdgray),
+      ),
+    ),
+  );
 }
